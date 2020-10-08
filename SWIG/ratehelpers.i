@@ -45,6 +45,13 @@ using QuantLib::DatedOISRateHelper;
 using QuantLib::FxSwapRateHelper;
 using QuantLib::OvernightIndexFutureRateHelper;
 using QuantLib::SofrFutureRateHelper;
+
+using QuantLib::BasisTwoSwapHelper;
+//using QuantLib::TenorBasisSwapHelper;
+//using QuantLib::CrossCcyBasisSwapHelper;
+//using QuantLib::CrossCcyBasisMtMResetSwapHelper;
+//using QuantLib::ResetableCrossCurrencySwapHelper;
+
 %}
 
 struct Pillar {
@@ -103,7 +110,7 @@ class FraRateHelper : public RateHelper {
             BusinessDayConvention convention,
             bool endOfMonth,
             const DayCounter& dayCounter,
-            Pillar::Choice pillar = Pillar::LastRelevantDate,
+            Pillar::Choice pillar = Pillar::MaturityDate,
             Date customPillarDate = Date(),
             bool useIndexedCoupon = true);
     FraRateHelper(
@@ -115,33 +122,33 @@ class FraRateHelper : public RateHelper {
             BusinessDayConvention convention,
             bool endOfMonth,
             const DayCounter& dayCounter,
-            Pillar::Choice pillar = Pillar::LastRelevantDate,
+            Pillar::Choice pillar = Pillar::MaturityDate,
             Date customPillarDate = Date(),
             bool useIndexedCoupon = true);
     FraRateHelper(const Handle<Quote>& rate,
                   Natural monthsToStart,
                   const boost::shared_ptr<IborIndex>& index,
-                  Pillar::Choice pillar = Pillar::LastRelevantDate,
+                  Pillar::Choice pillar = Pillar::MaturityDate,
                   Date customPillarDate = Date(),
                   bool useIndexedCoupon = true);
     FraRateHelper(Rate rate,
                   Natural monthsToStart,
                   const boost::shared_ptr<IborIndex>& index,
-                  Pillar::Choice pillar = Pillar::LastRelevantDate,
+                  Pillar::Choice pillar = Pillar::MaturityDate,
                   Date customPillarDate = Date(),
                   bool useIndexedCoupon = true);
     FraRateHelper(const Handle<Quote>& rate,
                   Natural immOffsetStart,
                   Natural immOffsetEnd,
                   const boost::shared_ptr<IborIndex>& iborIndex,
-                  Pillar::Choice pillar = Pillar::LastRelevantDate,
+                  Pillar::Choice pillar = Pillar::MaturityDate,
                   Date customPillarDate = Date(),
                   bool useIndexedCoupon = true);
     FraRateHelper(Rate rate,
                   Natural immOffsetStart,
                   Natural immOffsetEnd,
                   const boost::shared_ptr<IborIndex>& iborIndex,
-                  Pillar::Choice pillar = Pillar::LastRelevantDate,
+                  Pillar::Choice pillar = Pillar::MaturityDate,
                   Date customPillarDate = Date(),
                   bool useIndexedCoupon = true);
 };
@@ -252,6 +259,24 @@ class SwapRateHelper : public RateHelper {
     boost::shared_ptr<VanillaSwap> swap();
 };
 
+%shared_ptr(BasisTwoSwapHelper)
+class BasisTwoSwapHelper : public RateHelper {
+  public:
+	    BasisTwoSwapHelper(
+					const Handle<Quote>& spread, const Period& swapTenor, const Calendar& calendar,
+				// Long tenor swap
+					Frequency longFixedFrequency, BusinessDayConvention longFixedConvention,
+					const DayCounter& longFixedDayCount, const boost::shared_ptr<IborIndex>& longIndex,
+				// Short tenor swap
+					Frequency shortFixedFrequency, BusinessDayConvention shortFixedConvention,
+					const DayCounter& shortFixedDayCount, const boost::shared_ptr<IborIndex>& shortIndex,
+					bool longMinusShort = true,
+				// Discount curve
+					const Handle<YieldTermStructure>& discountingCurve = Handle<YieldTermStructure>());
+		boost::shared_ptr<VanillaSwap> longSwap();
+		boost::shared_ptr<VanillaSwap> shortSwap();
+};
+
 %shared_ptr(BondHelper)
 class BondHelper : public RateHelper {
   public:
@@ -308,6 +333,23 @@ class OISRateHelper : public RateHelper {
             const Spread overnightSpread = 0.0,
             Pillar::Choice pillar = Pillar::LastRelevantDate,
             Date customPillarDate = Date());
+/*    OISRateHelper(
+            Natural settlementDays,
+            const Period& tenor,
+            const Handle<Quote>& rate,
+            const boost::shared_ptr<OvernightIndex>& index,
+            Natural paymentLag = 0,
+			const Spread overnightSpread = 0.0,
+			const Handle<YieldTermStructure>& discountingCurve
+                                        = Handle<YieldTermStructure>(),
+            bool telescopicValueDates = false,
+            BusinessDayConvention paymentConvention = Following,
+            Frequency paymentFrequency = Annual,
+            const Calendar& paymentCalendar = Calendar(),
+            const Period& forwardStart = 0 * Days, 
+            Pillar::Choice pillar = Pillar::LastRelevantDate,
+            Date customPillarDate = Date());
+*/
     boost::shared_ptr<OvernightIndexedSwap> swap();
 };
 
@@ -337,6 +379,8 @@ class FxSwapRateHelper : public RateHelper {
             bool isFxBaseCurrencyCollateralCurrency,
             const Handle<YieldTermStructure>& collateralCurve,
             const Calendar& tradingCalendar = Calendar());
+			
+    Real impliedQuote();
 };
 
 %shared_ptr(OvernightIndexFutureRateHelper)
