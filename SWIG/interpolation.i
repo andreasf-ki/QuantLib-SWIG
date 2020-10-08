@@ -156,98 +156,48 @@ using QuantLib::ConvexMonotone;
 class MonotonicCubic : public Cubic {
   public:
     MonotonicCubic()
-    : Cubic(QuantLib::CubicInterpolation::Spline, true) {}
+    : Cubic(QuantLib::CubicInterpolation::Spline, true,
+            QuantLib::CubicInterpolation::SecondDerivative, 0.0,
+            QuantLib::CubicInterpolation::SecondDerivative, 0.0) {}
 };
 
 class SplineCubic : public Cubic {
   public:
     SplineCubic()
-    : Cubic(QuantLib::CubicInterpolation::Spline, false) {}
-};
-
-class NaturalCubic : public Cubic {
-  public:
-    NaturalCubic()
-    : Cubic(QuantLib::CubicInterpolation::Spline, false) {}
-};
-
-class NaturalCubicOM1 : public Cubic {
-  public:
-    NaturalCubicOM1()
-    : Cubic(QuantLib::CubicInterpolation::SplineOM1, false) {}
-};
-
-class NaturalCubicOM2 : public Cubic {
-  public:
-    NaturalCubicOM2()
-    : Cubic(QuantLib::CubicInterpolation::SplineOM2, false) {}
+    : Cubic(QuantLib::CubicInterpolation::Spline, false,
+            QuantLib::CubicInterpolation::SecondDerivative, 0.0,
+            QuantLib::CubicInterpolation::SecondDerivative, 0.0) {}
 };
 
 class Kruger : public Cubic {
   public:
     Kruger()
-    : Cubic(QuantLib::CubicInterpolation::Kruger, false) {}
-};
-
-class Akima : public Cubic {
-  public:
-    Kruger()
-    : Cubic(QuantLib::CubicInterpolation::Akima, false) {}
+    : Cubic(QuantLib::CubicInterpolation::Kruger) {}
 };
 
 class DefaultLogCubic : public QuantLib::LogCubic {
   public:
     DefaultLogCubic()
-    : QuantLib::LogCubic(QuantLib::CubicInterpolation::Kruger, true) {}
+    : QuantLib::LogCubic(QuantLib::CubicInterpolation::Kruger) {}
 };
 
 class MonotonicLogCubic : public QuantLib::LogCubic {
   public:
     MonotonicLogCubic()
-    : QuantLib::LogCubic(QuantLib::CubicInterpolation::Spline, true) {}
-};
-
-class NaturalLogCubic : public QuantLib::LogCubic {
-  public:
-    NaturalLogCubic()
-    : QuantLib::LogCubic(QuantLib::CubicInterpolation::Spline, false) {}
-};
-
-class NaturalLogCubicOM1 : public QuantLib::LogCubic {
-  public:
-    NaturalLogCubicOM1()
-    : QuantLib::LogCubic(QuantLib::CubicInterpolation::SplineOM1, false) {}
-};
-
-class NaturalLogCubicOM2 : public QuantLib::LogCubic {
-  public:
-    NaturalLogCubicOM2()
-    : QuantLib::LogCubic(QuantLib::CubicInterpolation::SplineOM2, false) {}
+    : QuantLib::LogCubic(QuantLib::CubicInterpolation::Spline, true,
+                         QuantLib::CubicInterpolation::SecondDerivative, 0.0,
+                         QuantLib::CubicInterpolation::SecondDerivative, 0.0) {}
 };
 
 class KrugerLog : public QuantLib::LogCubic {
   public:
     KrugerLog()
-    : QuantLib::LogCubic(QuantLib::CubicInterpolation::Kruger, false) {}
-};
-
-class AkimaLog : public QuantLib::LogCubic {
-  public:
-    AkimaLog()
-    : QuantLib::LogCubic(QuantLib::CubicInterpolation::Akima, false) {}
+    : QuantLib::LogCubic(QuantLib::CubicInterpolation::Kruger, false,
+                         QuantLib::CubicInterpolation::SecondDerivative, 0.0,
+                         QuantLib::CubicInterpolation::SecondDerivative, 0.0) {}
 };
 %}
 
-
-struct NaturalCubic {};
-struct NaturalCubicOM1 {};
-struct NaturalCubicOM2 {};
-struct NaturalLogCubic {};
-struct NaturalLogCubicOM1 {};
-struct NaturalLogCubicOM2 {};
-struct Akima {};
-struct AkimaLog {};
-##
 struct BackwardFlat {};
 struct ForwardFlat {};
 struct Linear {};
@@ -259,7 +209,6 @@ struct MonotonicLogCubic {};
 struct SplineCubic {};
 struct Kruger {};
 struct KrugerLog {};
-
 struct ConvexMonotone {
     ConvexMonotone(Real quadraticity = 0.3,
                    Real monotonicity = 0.7,
