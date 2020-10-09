@@ -124,15 +124,31 @@ class Name : public YieldTermStructure {
 
 
 export_piecewise_curve(PiecewiseFlatForward,ForwardRate,BackwardFlat);
-export_piecewise_curve(PiecewiseLogLinearDiscount,Discount,LogLinear);
 export_piecewise_curve(PiecewiseLinearForward,ForwardRate,Linear);
+export_piecewise_curve(PiecewiseNatCubicForward,ForwardRate,NaturalCubic);
+export_piecewise_curve(PiecewiseMonoNatCubicForward,ForwardRate,MonotonicCubic);
+export_piecewise_curve(PiecewiseKrugCubicForward,ForwardRate,Kruger);
+
 export_piecewise_curve(PiecewiseLinearZero,ZeroYield,Linear);
-export_piecewise_curve(PiecewiseCubicZero,ZeroYield,Cubic);
-export_piecewise_curve(PiecewiseLogCubicDiscount,Discount,MonotonicLogCubic);
-export_piecewise_curve(PiecewiseSplineCubicDiscount,Discount,SplineCubic);
-export_piecewise_curve(PiecewiseKrugerZero,ZeroYield,Kruger);
-export_piecewise_curve(PiecewiseKrugerLogDiscount,Discount,KrugerLog);
 export_piecewise_curve(PiecewiseConvexMonotoneZero,ZeroYield,ConvexMonotone);
+export_piecewise_curve(PiecewiseLogLinearZero,ZeroYield,LogLinear);
+export_piecewise_curve(PiecewiseCubicZero,ZeroYield,Cubic); // == Kruger ?
+export_piecewise_curve(PiecewiseKrugCubicZero,ZeroYield,Kruger); // == Cubic ?
+export_piecewise_curve(PiecewiseNatCubicZero,ZeroYield,NaturalCubic);
+export_piecewise_curve(PiecewiseNatCubicZeroOM1,ZeroYield,NaturalCubicOM1);
+export_piecewise_curve(PiecewiseNatCubicZeroOM2,ZeroYield,NaturalCubicOM2);
+export_piecewise_curve(PiecewiseMonoNatCubicZero,ZeroYield,MonotonicCubic);
+export_piecewise_curve(PiecewiseAkiCubicZero,ZeroYield,Akima);
+
+export_piecewise_curve(PiecewiseKrugerLogDiscount,Discount,KrugerLog);
+export_piecewise_curve(PiecewiseSplineCubicDiscount,Discount,SplineCubic);
+export_piecewise_curve(PiecewiseKrugCubicDiscount,Discount,Kruger);
+export_piecewise_curve(PiecewiseNatCubicDiscount,Discount,NaturalCubic);
+export_piecewise_curve(PiecewiseLogNatCubicDiscount,Discount,NaturalLogCubic);
+export_piecewise_curve(PiecewiseLogNatCubicOM1Discount,Discount,NaturalLogCubicOM1);
+export_piecewise_curve(PiecewiseLogNatCubicOM2Discount,Discount,NaturalLogCubicOM2);
+export_piecewise_curve(PiecewiseMonoLogCubicDiscount,Discount,MonotonicLogCubic);
+export_piecewise_curve(PiecewiseLogLinearDiscount,Discount,LogLinear);
 
 
 // global boostrapper

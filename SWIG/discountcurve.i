@@ -28,9 +28,22 @@
 using QuantLib::InterpolatedDiscountCurve;
 %}
 
+%shared_ptr(InterpolatedDiscountCurve<Linear>);
 %shared_ptr(InterpolatedDiscountCurve<LogLinear>);
+%shared_ptr(InterpolatedDiscountCurve<MonotonicCubic>);
 %shared_ptr(InterpolatedDiscountCurve<MonotonicLogCubic>);
+%shared_ptr(InterpolatedDiscountCurve<Cubic>);
 %shared_ptr(InterpolatedDiscountCurve<SplineCubic>);
+%shared_ptr(InterpolatedDiscountCurve<NaturalCubic>);
+%shared_ptr(InterpolatedDiscountCurve<NaturalLogCubic>);
+%shared_ptr(InterpolatedDiscountCurve<NaturalLogCubicOM1>);
+%shared_ptr(InterpolatedDiscountCurve<NaturalLogCubicOM2>);
+%shared_ptr(InterpolatedDiscountCurve<NaturalCubicOM1>);
+%shared_ptr(InterpolatedDiscountCurve<NaturalCubicOM2>);
+%shared_ptr(InterpolatedDiscountCurve<Kruger>);
+%shared_ptr(InterpolatedDiscountCurve<KrugerLog>);
+%shared_ptr(InterpolatedDiscountCurve<Akima>);
+%shared_ptr(InterpolatedDiscountCurve<AkimaLog>);
 
 template <class Interpolator>
 class InterpolatedDiscountCurve : public YieldTermStructure {
@@ -50,7 +63,18 @@ class InterpolatedDiscountCurve : public YieldTermStructure {
 };
 
 %template(DiscountCurve) InterpolatedDiscountCurve<LogLinear>;
+%template(DiscountCurveLogLinear) InterpolatedDiscountCurve<LogLinear>;
+%template(DiscountCurveLinear) InterpolatedDiscountCurve<Linear>;
 %template(MonotonicLogCubicDiscountCurve) InterpolatedDiscountCurve<MonotonicLogCubic>;
+%template(DiscountCurveMonoNatLogCubic) InterpolatedDiscountCurve<MonotonicLogCubic>;
 %template(NaturalCubicDiscountCurve) InterpolatedDiscountCurve<SplineCubic>;
+%template(DiscountCurveNatCubic) InterpolatedDiscountCurve<NaturalCubic>;
+%template(DiscountCurveNatLogCubic) InterpolatedDiscountCurve<NaturalLogCubic>;
+%template(DiscountCurveNatLogCubicOM1) InterpolatedDiscountCurve<NaturalLogCubicOM1>;
+%template(DiscountCurveNatLogCubicOM2) InterpolatedDiscountCurve<NaturalLogCubicOM2>;
+%template(DiscountCurveKrugCubic) InterpolatedDiscountCurve<Kruger>;
+%template(DiscountCurveKrugLogCubic) InterpolatedDiscountCurve<KrugerLog>;
+%template(DiscountCurveAkiCubic) InterpolatedDiscountCurve<Akima>;
+%template(DiscountCurveAkiLogCubic) InterpolatedDiscountCurve<AkimaLog>;
 
 #endif
