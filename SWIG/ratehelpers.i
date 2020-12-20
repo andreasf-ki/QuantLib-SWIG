@@ -47,7 +47,7 @@ using QuantLib::OvernightIndexFutureRateHelper;
 using QuantLib::SofrFutureRateHelper;
 
 using QuantLib::BasisTwoSwapHelper;
-//using QuantLib::TenorBasisSwapHelper;
+using QuantLib::TenorBasisSwapHelper;
 //using QuantLib::CrossCcyBasisSwapHelper;
 //using QuantLib::CrossCcyBasisMtMResetSwapHelper;
 //using QuantLib::ResetableCrossCurrencySwapHelper;
@@ -277,6 +277,18 @@ class BasisTwoSwapHelper : public RateHelper {
 		boost::shared_ptr<VanillaSwap> shortSwap();
 };
 
+%shared_ptr(TenorBasisSwapHelper);
+class TenorBasisSwapHelper : public RateHelper {
+  public:
+	    TenorBasisSwapHelper(
+						Handle<Quote> spread, const Period& swapTenor, const boost::shared_ptr<IborIndex>& longIndex,
+                        const boost::shared_ptr<IborIndex>& shortIndex, const Period& shortPayTenor = Period(),
+                        const Handle<YieldTermStructure>& discountingCurve = Handle<YieldTermStructure>(),
+                        bool spreadOnShort = true, bool includeSpread = false,
+						SubPeriodsCoupon_ext::Type type = SubPeriodsCoupon_ext::Compounding);
+		boost::shared_ptr<TenorBasisSwap> swap();
+};
+
 %shared_ptr(BondHelper)
 class BondHelper : public RateHelper {
   public:
@@ -325,7 +337,7 @@ class OISRateHelper : public RateHelper {
             const Handle<YieldTermStructure>& discountingCurve
                                         = Handle<YieldTermStructure>(),
             bool telescopicValueDates = false,
-            Natural paymentLag = 0,
+            Natural paymentLag = 1,
             BusinessDayConvention paymentConvention = Following,
             Frequency paymentFrequency = Annual,
             const Calendar& paymentCalendar = Calendar(),
@@ -333,23 +345,19 @@ class OISRateHelper : public RateHelper {
             const Spread overnightSpread = 0.0,
             Pillar::Choice pillar = Pillar::LastRelevantDate,
             Date customPillarDate = Date());
-/*    OISRateHelper(
+	%extend {
+		OISRateHelper(
             Natural settlementDays,
             const Period& tenor,
             const Handle<Quote>& rate,
             const boost::shared_ptr<OvernightIndex>& index,
-            Natural paymentLag = 0,
-			const Spread overnightSpread = 0.0,
-			const Handle<YieldTermStructure>& discountingCurve
-                                        = Handle<YieldTermStructure>(),
-            bool telescopicValueDates = false,
-            BusinessDayConvention paymentConvention = Following,
-            Frequency paymentFrequency = Annual,
-            const Calendar& paymentCalendar = Calendar(),
-            const Period& forwardStart = 0 * Days, 
-            Pillar::Choice pillar = Pillar::LastRelevantDate,
-            Date customPillarDate = Date());
-*/
+            Natural paymentLag,
+			const Spread overnightSpread) {
+				return new OISRateHelper(settlementDays,tenor,rate,index,Handle<YieldTermStructure>(),
+				                false,paymentLag,Following,Annual,Calendar(),0*Days,overnightSpread,
+								Pillar::LastRelevantDate,Date());
+			};
+	}
     boost::shared_ptr<OvernightIndexedSwap> swap();
 };
 

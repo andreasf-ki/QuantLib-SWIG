@@ -64,6 +64,7 @@ using QuantLib::FixedRateCoupon;
 using QuantLib::Leg;
 using QuantLib::FloatingRateCoupon;
 using QuantLib::OvernightIndexedCoupon;
+using QuantLib::SubPeriodsCoupon_ext;
 %}
 
 %shared_ptr(SimpleCashFlow)
@@ -176,6 +177,12 @@ class FloatingRateCoupon : public Coupon {
         return boost::dynamic_pointer_cast<FloatingRateCoupon>(cf);
     }
 %}
+
+%shared_ptr(SubPeriodsCoupon_ext)
+class SubPeriodsCoupon_ext : public FloatingRateCoupon {
+  public:
+	enum Type { Averaging, Compounding };
+};
 
 %shared_ptr(OvernightIndexedCoupon)
 class OvernightIndexedCoupon : public FloatingRateCoupon {

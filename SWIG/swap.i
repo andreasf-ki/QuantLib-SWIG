@@ -40,6 +40,17 @@ using QuantLib::DiscountingSwapEngine;
 using QuantLib::FloatFloatSwap;
 using QuantLib::OvernightIndexedSwap;
 using QuantLib::MakeOIS;
+
+using QuantLib::TenorBasisSwap;
+using QuantLib::CrossCcySwap;
+using QuantLib::CrossCcyBasisSwap;
+using QuantLib::CrossCcyBasisMtMResetSwap;
+using QuantLib::CurrencySwap;
+using QuantLib::CrossCurrencySwap;
+using QuantLib::ResetableCrossCurrencySwap;
+using QuantLib::VanillaCrossCurrencySwap;
+using QuantLib::OvernightIndexedBasisSwap;
+
 %}
 
 %shared_ptr(Swap)
@@ -250,6 +261,88 @@ class NonstandardSwap : public Swap {
     const Leg &fixedLeg() const;
     const Leg &floatingLeg() const;
 };
+
+%{
+using QuantLib::SubPeriodsCoupon_ext;
+%}
+
+%shared_ptr(TenorBasisSwap)
+class TenorBasisSwap : public Swap {
+  public:
+    TenorBasisSwap(Real nominal, 
+					bool payLongIndex,
+					const Schedule &longSchedule,  
+					const boost::shared_ptr<IborIndex>& longIndex,  
+					Spread longSpread, 
+					const Schedule &shortSchedule, 
+					const boost::shared_ptr<IborIndex>& shortIndex, 
+					Spread shortSpread,
+					bool includeSpread, 
+					SubPeriodsCoupon_ext::Type type);
+    TenorBasisSwap(const Date& effectiveDate, 
+					Real nominal, 
+					const Period& swapTenor, 
+					bool payLongIndex,
+					const boost::shared_ptr<IborIndex>& longIndex, 
+					Spread longSpread,
+					const boost::shared_ptr<IborIndex>& shortIndex, 
+					Spread shortSpread, 
+					const Period& shortPayTenor,
+					DateGeneration::Rule rule, 
+					bool includeSpread,
+					SubPeriodsCoupon_ext::Type type);
+    // Inspectors
+    Real nominal() ;
+	bool payLongIndex();
+	
+    const Schedule& longSchedule() const;
+    const Schedule& shortSchedule() const;
+    const boost::shared_ptr<IborIndex>& longIndex() const;
+    const boost::shared_ptr<IborIndex>& shortIndex() const;
+    Spread longSpread() const;
+    Spread shortSpread() const;
+	const Leg& longLeg() const;
+	const Leg& shortLeg() const;
+    const Period& shortPayTenor() const;
+
+    Spread fairLongLegSpread() const;
+    Spread fairShortLegSpread() const;
+    Real longLegBPS() const;
+    Real shortLegBPS() const;
+    Real longLegNPV() const;
+    Real shortLegNPV() const;
+};
+
+%shared_ptr(OvernightIndexedBasisSwap)
+class OvernightIndexedBasisSwap : public Swap {
+  public:
+	enum Type { Receiver = -1, Payer = 1 };
+
+    OvernightIndexedBasisSwap(OvernightIndexedBasisSwap::Type type, Real nominal, 
+							  const Schedule& oisSchedule,
+                              const OvernightIndexPtr& overnightIndex, 
+							  const Schedule& iborSchedule,
+                              const IborIndexPtr& iborIndex, Spread oisSpread = 0.0,
+                              Spread iborSpread = 0.0); 
+		
+    Rate nominal() const; 
+	const boost::shared_ptr<OvernightIndex> overnightIndex();
+	const Schedule& oisSchedule();
+	const boost::shared_ptr<IborIndex>& iborIndex();
+	Spread oisSpread() const;
+	const Leg& iborLeg() const; 
+	const Schedule& iborSchedule();
+	Spread iborSpread() const; 
+	const Leg& overnightLeg() const;
+	Real iborLegBPS() const;
+	Real iborLegNPV() const;
+	Real overnightLegBPS() const;
+	Real overnightLegNPV() const;
+	Rate fairIborSpread() const;
+	Rate fairOvernightSpread() const;
+ 
+};
+
 
 %shared_ptr(DiscountingSwapEngine)
 class DiscountingSwapEngine : public PricingEngine {
